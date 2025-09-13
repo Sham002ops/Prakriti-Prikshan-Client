@@ -1,0 +1,31 @@
+import { useNavigate } from "react-router-dom";
+import Button from "./Button";
+
+const Header = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    window.localStorage.clear();
+    navigate("/signin");
+    return null;
+  };
+
+  return (
+    <header className="w-full bg-gradient-to-r from-emerald-700 to-emerald-900 p-4 shadow-md">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+          Prakriti Parikshan
+        </h1>
+        <Button
+          variant="primary"
+          size="md"
+          text="Logout"
+          transition="4"
+          onClick={handleLogout}
+        />
+      </div>
+    </header>
+  );
+};
+
+export default Header;

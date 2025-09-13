@@ -1,0 +1,46 @@
+{
+  "name": "prakriti-chatbot",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.5",
+    "gsap": "^3.13.0",
+    "lucide-react": "^0.539.0",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.21",
+    "axios": "^1.9.0",
+    "eslint": "^9.25.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.0.0",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.2",
+    "npm": "^11.3.0",
+    "postcss": "^8.5.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-embed": "^3.7.0",
+    "react-router-dom": "^7.0.2",
+    "reddit-embed": "^1.1.2",
+    "tailwind-scrollbar-hide": "^2.0.0",
+    "tailwindcss": "^4.1.5",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.31.1",
+    "vite": "^6.3.4"
+  }
+}
