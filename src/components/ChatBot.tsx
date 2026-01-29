@@ -5,7 +5,6 @@ import { UserMessage } from "./UserMessage";
 // import Button from "./Button";
 import { ProcessingIcon } from "./ProcessingIcon";
 import { PrakritiMessage } from "./TextMessage";
-import { Bot } from "lucide-react";
 
 interface ChatMessage {
   sender: "user" | "bot" | "system";

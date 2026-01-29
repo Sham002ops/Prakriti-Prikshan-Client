@@ -1,18 +1,14 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useNavigate } from "react-router-dom";
-
-// IMPORTANT: Ensure Tailwind is configured and gsap is installed.
-// npm i gsap
-// Tailwind: https://tailwindcss.com/docs/guides/create-react-app (or your setup)
 
 // Theme tokens (can be moved to CSS vars if preferred)
 const gradientHero = "bg-gradient-to-br from-emerald-500  to-black";
 const gradientCTA = "bg-gradient-to-r from-emerald-500  to-emerald-600";
 const gradientCard = "bg-gradient-to-b from-neutral-900 to-black";
 
-// Mock Data ("mook dada" as requested)
+// Mock Data
 const FEATURES: { title: string; desc: string; icon: string }[] = [
   {
     title: "Prakriti Assessment",
@@ -89,8 +85,6 @@ const FAQS = [
   },
 ];
 
-
-
 gsap.registerPlugin(ScrollTrigger);
 
 // Utility hook: animate section on enter
@@ -130,8 +124,13 @@ const BackgroundOrbs: React.FC = () => {
     tl.to(q(".orb1"), { y: -20, x: 10 }).to(q(".orb1"), { y: 0, x: 0 });
     tl.to(q(".orb2"), { y: -14, x: -12 }, 0).to(q(".orb2"), { y: 0, x: 0 });
     tl.to(q(".orb3"), { y: -18, x: 6 }, 0.5).to(q(".orb3"), { y: 0, x: 0 });
-    return () => tl.kill();
+    
+    // FIX: Return void, call kill in cleanup
+    return () => {
+      tl.kill();
+    };
   }, []);
+  
   return (
     <div ref={orbRef} className="pointer-events-none absolute inset-0 overflow-hidden">
       <div className="orb1 absolute -top-10 -left-10 h-56 w-56 rounded-full blur-3xl opacity-50" style={{
@@ -146,54 +145,6 @@ const BackgroundOrbs: React.FC = () => {
     </div>
   );
 };
-
-// // Mock Chat modal (demo only)
-// const DemoChatModal: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
-//   const [lines] = useState([
-//     { who: "bot", text: "Hi! I’m Prakriti Bot. Ready to discover your dosha?" },
-//     { who: "user", text: "Yes! I feel heat and get irritated quickly." },
-//     { who: "bot", text: "That may indicate Pitta dominance. Want lifestyle tips?" },
-//   ]);
-//   const boxRef = useRef<HTMLDivElement>(null);
-//   useEffect(() => {
-//     if (!open) return;
-//     if (!boxRef.current) return;
-//     const tl = gsap.timeline();
-//     tl.fromTo(
-//       boxRef.current,
-//       { y: 24, autoAlpha: 0, scale: 0.98 },
-//       { y: 0, autoAlpha: 1, scale: 1, duration: 0.4, ease: "power3.out" }
-//     );
-//     tl.from(".chat-line", { autoAlpha: 0, y: 12, stagger: 0.15, duration: 0.4 }, "<0.05");
-//     return () => tl.kill();
-//   }, [open]);
-//   if (!open) return null;
-//   return (
-//     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4">
-//       <div ref={boxRef} className="w-full max-w-lg rounded-2xl border border-emerald-600/30 bg-neutral-950 text-white shadow-2xl">
-//         <div className="flex items-center justify-between p-4 border-b border-white/10">
-//           <div className="flex items-center gap-3">
-//             <div className="h-8 w-8 grid place-items-center rounded-full bg-emerald-500">🤖</div>
-//             <h3 className="font-semibold">Prakriti Chat (Demo)</h3>
-//           </div>
-//           <button onClick={onClose} className="text-white/70 hover:text-white">✕</button>
-//         </div>
-//         <div className="p-4 space-y-3 max-h-[60vh] overflow-y-auto">
-//           {lines.map((l, i) => (
-//             <div key={i} className={`chat-line max-w-[80%] ${l.who === "user" ? "ml-auto" : ""}`}>
-//               <div className={`${l.who === "user" ? "bg-emerald-600/20 border border-emerald-500/30" : "bg-white/5 border border-white/10"} rounded-xl px-3 py-2 text-sm`}>{l.text}</div>
-//             </div>
-//           ))}
-//           <div className="text-xs text-white/50">(This is a static preview. Hook up your real ChatBot here.)</div>
-//         </div>
-//         <div className="p-3 border-t border-white/10 flex gap-2">
-//           <input className="flex-1 rounded-lg bg-black/40 border border-white/10 px-3 py-2 text-sm outline-none focus:border-emerald-500" placeholder="Type a message…" />
-//           <button className={`rounded-lg px-4 py-2 text-sm font-medium ${gradientCTA} text-black`}>Send</button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
 const SectionHeading: React.FC<{ title: string; subtitle?: string }> = ({ title, subtitle }) => (
   <div className="mb-10 text-center">
@@ -222,15 +173,23 @@ const PrakritiLanding: React.FC = () => {
   const faqRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const [openChat, setOpenChat] = useState(false);
+  // FIX: Remove unused openChat state or use it
+  // const [openChat, setOpenChat] = useState(false);
 
-  const handleStartAssessment = () =>{
-    navigate("/home")
-  }
+  const handleStartAssessment = () => {
+    navigate("/home");
+  };
 
   const handlelogin = () => {
     navigate("/signin");
-  }
+  };
+
+  const handleChatBot = () => {
+    // If you have a chat route, navigate to it
+    navigate("/chat");
+    // Or if you want to use the modal, uncomment the openChat state above and use:
+    // setOpenChat(true);
+  };
 
   // Hero entrance timeline
   useLayoutEffect(() => {
@@ -261,7 +220,11 @@ const PrakritiLanding: React.FC = () => {
       ease: "none",
       repeat: -1,
     });
-    return () => tl.kill();
+    
+    // FIX: Return void, call kill in cleanup
+    return () => {
+      tl.kill();
+    };
   }, []);
 
   return (
@@ -272,7 +235,7 @@ const PrakritiLanding: React.FC = () => {
         <nav className="fixed top-0 left-0 right-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-black/30 bg-black/20 border-b border-white/10">
           <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-                <img src="/logo.png" alt="" className="w-14 h-12"/>
+              <img src="/logo.png" alt="" className="w-14 h-12"/>
               <span className="font-semibold">Prakriti AI</span>
             </div>
             <div className="hidden md:flex items-center gap-6 text-sm text-white/80">
@@ -296,7 +259,7 @@ const PrakritiLanding: React.FC = () => {
               </p>
               <div className="hero-cta mt-6 flex flex-wrap gap-3">
                 <button className={`rounded-xl px-5 py-3 font-semibold ${gradientCTA} text-black shadow-lg hover:brightness-110 active:brightness-95`} onClick={handleStartAssessment}>Start Assessment</button>
-                <button onClick={() => setOpenChat(true)} className="rounded-xl px-5 py-3 font-semibold border border-white/20 bg-black/30 hover:bg-black/40">💬 Chat with Prakriti Bot</button>
+                <button onClick={handleChatBot} className="rounded-xl px-5 py-3 font-semibold border border-white/20 bg-black/30 hover:bg-black/40">💬 Chat with Prakriti Bot</button>
               </div>
             </div>
             <div className="hero-card relative">
@@ -370,7 +333,7 @@ const PrakritiLanding: React.FC = () => {
           <div ref={marqueeRef} className="flex gap-4 w-[200%] px-4">
             {[...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
               <div key={i} data-reveal className="min-w-[320px] max-w-sm rounded-2xl p-5 bg-neutral-950 border border-white/10">
-                <div className="text-white/80">“{t.quote}”</div>
+                <div className="text-white/80">"{t.quote}"</div>
                 <div className="mt-3 text-sm text-white/60">— {t.name}, {t.tag}</div>
               </div>
             ))}
@@ -400,7 +363,7 @@ const PrakritiLanding: React.FC = () => {
       <footer className="relative py-10 border-t border-white/10 bg-black/50">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-                <img src="/logo.png" alt="" className="w-14 h-12"/>
+            <img src="/logo.png" alt="" className="w-14 h-12"/>
             <span className="text-white/80">Prakriti AI</span>
           </div>
           <p className="text-xs text-white/50">© {new Date().getFullYear()} Prakriti AI. For education only. Not medical advice.</p>
@@ -411,7 +374,6 @@ const PrakritiLanding: React.FC = () => {
           </div>
         </div>
       </footer>
-
     </div>
   );
 };

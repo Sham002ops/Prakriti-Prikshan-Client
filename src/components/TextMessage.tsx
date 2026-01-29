@@ -1,5 +1,4 @@
 import { Bot } from 'lucide-react'
-import React from 'react'
 
 export const PrakritiMessage = ({message}:{message: string}) => {
   return (
