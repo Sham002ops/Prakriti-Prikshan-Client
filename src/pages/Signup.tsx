@@ -128,11 +128,14 @@ const Signup = () => {
         password,
         email
       });
-
+        console.log("backend url : ", BACKEND_URL);
+        
       if (response.data.message === "User signed up") {
         navigate("/signin");
       } else {
         alert("Signup failed: " + response.data.message);
+                console.log("backend url : ", BACKEND_URL);
+
       }
     } catch (e: unknown) {
       if (axios.isAxiosError(e) && e.response && e.response.data.error) {
