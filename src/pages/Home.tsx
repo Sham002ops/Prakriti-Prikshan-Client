@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import ChatBot from "../components/ChatBot";
@@ -9,58 +9,219 @@ type Dosha = "Vata" | "Pitta" | "Kapha";
 interface Option {
   label: string;
   dosha: Dosha;
+  weight?: number; // defaults to 1
 }
 
 interface Question {
   id: number;
-  question: string;
+  section: "Darshan" | "Prashna-Functional" | "Prashna-Psychological";
+  parameter: string; // e.g., "Shariram (Body Structure)"
+  question: string;  // prompt shown in UI
   options: Option[];
 }
 
 const questions: Question[] = [
+  // --------------- Darshan (Physical Examination) ---------------
   {
     id: 1,
-    question: "What best describes your body build?",
+    section: "Darshan",
+    parameter: "Shariram (Body Structure)",
+    question: "Select the characteristic that best matches Body Structure:",
     options: [
-      { label: "Thin and lightweight", dosha: "Vata" },
-      { label: "Medium and well-built", dosha: "Pitta" },
-      { label: "Heavy or solid build", dosha: "Kapha" },
+      { label: "Apachit shariram (Underdeveloped body)", dosha: "Vata" },
+      { label: "Shariramadhya (Medium build)", dosha: "Pitta" },
+      { label: "Sanhat shariram (Compact body)", dosha: "Kapha" },
     ],
   },
   {
     id: 2,
-    question: "How would you describe your skin?",
+    section: "Darshan",
+    parameter: "Avayavam (Body Parts)",
+    question: "Select the characteristic that best matches Body Parts:",
     options: [
-      { label: "Dry and rough", dosha: "Vata" },
-      { label: "Soft, warm, and reddish", dosha: "Pitta" },
-      { label: "Smooth, moist, and pale", dosha: "Kapha" },
+      { label: "Bahu kandara, sira, pratanah (Prominent tendons/veins)", dosha: "Vata" },
+      { label: "Shithil mridu sandhi mans (Loose soft joints and muscles)", dosha: "Pitta" },
+      { label: "Prithupina vaksh (Broad chest)", dosha: "Kapha" },
     ],
   },
   {
     id: 3,
-    question: "What is your hair like?",
+    section: "Darshan",
+    parameter: "Dat (Teeth)",
+    question: "Select the characteristic that best matches Teeth:",
     options: [
-      { label: "Dry, thin, tends to fall out", dosha: "Vata" },
-      { label: "Soft, oily, early graying or thinning", dosha: "Pitta" },
-      { label: "Thick, oily, shiny", dosha: "Kapha" },
+      { label: "Parush dashnam (Rough teeth)", dosha: "Vata" },
+      { label: "Dant vishuddh varna (Clean colored teeth)", dosha: "Pitta" },
+      { label: "Dirgh nakhah (Long nails) — use Kapha trait from nails as proxy", dosha: "Kapha" },
     ],
   },
   {
     id: 4,
-    question: "How do your nails look?",
+    section: "Darshan",
+    parameter: "Netram (Eyes)",
+    question: "Select the characteristic that best matches Eyes:",
     options: [
-      { label: "Rough and brittle", dosha: "Vata" },
-      { label: "Soft, reddish or flexible", dosha: "Pitta" },
-      { label: "Smooth, strong, white/pinkish", dosha: "Kapha" },
+      { label: "Chal drishti (Moving gaze)", dosha: "Vata" },
+      { label: "Tamra nayanam (Copper colored eyes)", dosha: "Pitta" },
+      { label: "Vishal/dirghakshah (Large/elongated eyes)", dosha: "Kapha" },
     ],
   },
   {
     id: 5,
-    question: "How do your eyes behave?",
+    section: "Darshan",
+    parameter: "Twacha/Varnah (Skin/Complexion)",
+    question: "Select the characteristic that best matches Skin/Complexion:",
     options: [
-      { label: "Moving quickly, restless", dosha: "Vata" },
-      { label: "Sharp, intense gaze", dosha: "Pitta" },
-      { label: "Calm, large, steady gaze", dosha: "Kapha" },
+      { label: "Parush ang (Rough limbs/skin)", dosha: "Vata" },
+      { label: "Tejasvi (Radiant)", dosha: "Pitta" },
+      { label: "Susnigdh varnah (Very smooth complexion)", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 6,
+    section: "Darshan",
+    parameter: "Kesh/Lom/Shmashruh (Hair/Body hair/Beard)",
+    question: "Select the characteristic that best matches Hair:",
+    options: [
+      { label: "Parush kesh (Rough hair)", dosha: "Vata" },
+      { label: "Kshipra palityam (Early graying)", dosha: "Pitta" },
+      { label: "Ghan keshah (Thick hair)", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 7,
+    section: "Darshan",
+    parameter: "Nakham (Nails)",
+    question: "Select the characteristic that best matches Nails:",
+    options: [
+      { label: "Parush nakh tanu ruksh (Rough, thin, dry nails)", dosha: "Vata" },
+      { label: "Tamra nakham (Copper colored nails)", dosha: "Pitta" },
+      { label: "Dirgh nakhah (Long nails)", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 8,
+    section: "Darshan",
+    parameter: "Sandhih (Joints)",
+    question: "Select the characteristic that best matches Joints:",
+    options: [
+      { label: "Satat sandhi shabd (Constant joint sounds)", dosha: "Vata" },
+      { label: "Prashithil sandhi (Loose joints/ligaments)", dosha: "Pitta" },
+      { label: "Snigdha/shalishtha sandhi (Smooth/sticky joints)", dosha: "Kapha" },
+    ],
+  },
+
+  // --------------- Prashna-Functional ---------------
+  {
+    id: 9,
+    section: "Prashna-Functional",
+    parameter: "Kshut (Appetite)",
+    question: "Select the characteristic that best matches Appetite:",
+    options: [
+      { label: "Bahu bhukam (Eats frequently)", dosha: "Vata" },
+      { label: "Tikshna kshudhah (Sharp appetite)", dosha: "Pitta" },
+      { label: "Alpa kshutah (Low appetite)", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 10,
+    section: "Prashna-Functional",
+    parameter: "Trit (Thirst)",
+    question: "Select the characteristic that best matches Thirst:",
+    options: [
+      { label: "— Less defined for Vata; pick closest overall", dosha: "Vata" },
+      { label: "Pipasavantah (Thirsty, drinks a lot)", dosha: "Pitta" },
+      { label: "Alpa trishna (Low thirst)", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 11,
+    section: "Prashna-Functional",
+    parameter: "Cheshta Gati (Movement/Activity)",
+    question: "Select the characteristic that best matches Movement/Activity:",
+    options: [
+      { label: "Chapal/Drut gati (Restless/Fast movement)", dosha: "Vata" },
+      { label: "— Neutral option", dosha: "Pitta" },
+      { label: "Mand cheshta (Slow activity, stable movement)", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 12,
+    section: "Prashna-Functional",
+    parameter: "Vani/Swara (Speech/Voice)",
+    question: "Select the characteristic that best matches Speech/Voice:",
+    options: [
+      { label: "Kshamah/Jarjarah (Weak/broken)", dosha: "Vata" },
+      { label: "Bhavy uccharah (Clear pronunciation)", dosha: "Pitta" },
+      { label: "Gambhir shabdah (Deep/pleasant voice)", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 13,
+    section: "Prashna-Functional",
+    parameter: "Nidra (Sleep)",
+    question: "Select the characteristic that best matches Sleep:",
+    options: [
+      { label: "Alpa nidra (Less sleep)", dosha: "Vata" },
+      { label: "— Neutral option", dosha: "Pitta" },
+      { label: "Nidralu / likes sleep and drowsiness", dosha: "Kapha" },
+    ],
+  },
+
+  // --------------- Prashna-Psychological ---------------
+  {
+    id: 14,
+    section: "Prashna-Psychological",
+    parameter: "Buddhih/Smriti (Intelligence/Memory)",
+    question: "Select the characteristic that best matches Intelligence/Memory:",
+    options: [
+      { label: "Quick to learn but poor memory / unstable mind", dosha: "Vata" },
+      { label: "Medhavi / Nipun mati (Intelligent, sharp mind)", dosha: "Pitta" },
+      { label: "Smritiman / Dridh shastra mati (Good/firm memory)", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 15,
+    section: "Prashna-Psychological",
+    parameter: "Swabhav (Temperament)",
+    question: "Select the characteristic that best matches Temperament:",
+    options: [
+      { label: "Quick to change, quick to fear/anger (lability)", dosha: "Vata" },
+      { label: "Brave/honorable/clean but can get angry/jealous", dosha: "Pitta" },
+      { label: "Gentle, tolerant, forgiving, stable", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 16,
+    section: "Prashna-Psychological",
+    parameter: "Sohadam (Friendship)",
+    question: "Select the characteristic that best matches Friendship:",
+    options: [
+      { label: "Fickle / unstable friendship", dosha: "Vata" },
+      { label: "— Neutral option", dosha: "Pitta" },
+      { label: "Stable friends", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 17,
+    section: "Prashna-Psychological",
+    parameter: "Vikarah (Disease susceptibility)",
+    question: "Select the characteristic that best matches Disease susceptibility:",
+    options: [
+      { label: "Cold/trembling/stiffness common", dosha: "Vata" },
+      { label: "Skin/moles/pimples/freckles common", dosha: "Pitta" },
+      { label: "Few diseases, slow to develop", dosha: "Kapha" },
+    ],
+  },
+  {
+    id: 18,
+    section: "Prashna-Psychological",
+    parameter: "Anukatvam (Animal resemblance) — heuristic",
+    question: "Pick the closest resemblance (heuristic):",
+    options: [
+      { label: "Shvanah/Kakah (Dog/Crow) — light, restless", dosha: "Vata" },
+      { label: "Vyaghrah (Tiger) — sharp, intense", dosha: "Pitta" },
+      { label: "Gajah (Elephant) — stable, robust", dosha: "Kapha" },
     ],
   },
 ];
@@ -83,23 +244,29 @@ export default function Home() {
   const selectAnswer = (dosha: Dosha) => {
     const q = questions[index];
     setAnswers((prev) => ({ ...prev, [q.id]: dosha }));
-    setTimeout(() => {
-      setIndex((i) => i + 1);
-    }, 200);
+    setTimeout(() => setIndex((i) => i + 1), 150);
   };
 
   const prev = () => {
     if (index > 0) setIndex((i) => i - 1);
   };
 
-  const result = useMemo(() => {
+  const tallies = useMemo(() => {
     const tally = { Vata: 0, Pitta: 0, Kapha: 0 };
-    Object.values(answers).forEach((dosha) => {
-      tally[dosha] += 1;
+    Object.entries(answers).forEach(([qid, d]) => {
+      // weight support if you add it later
+      const weight =
+        questions.find((q) => q.id === Number(qid))?.options.find((o) => o.dosha === d)?.weight ?? 1;
+      tally[d] += weight;
     });
-    const sorted = Object.entries(tally).sort((a, b) => b[1] - a[1]);
-    return sorted[0][0] as Dosha;
+    return tally;
   }, [answers]);
+
+  const result = useMemo(() => {
+    const entries = Object.entries(tallies) as Array<[Dosha, number]>;
+    const sorted = entries.sort((a, b) => b[1] - a[1]);
+    return sorted[0][0];
+  }, [tallies]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-700 via-emerald-900 to-black text-white">
@@ -115,7 +282,6 @@ export default function Home() {
               </h1>
             </div>
 
-            {/* Progress bar */}
             <div className="w-full bg-black/40 rounded-full h-2 sm:h-3 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-emerald-400 to-emerald-600 h-2 sm:h-3 transition-all"
@@ -127,6 +293,10 @@ export default function Home() {
                 ? `${totalQuestions} of ${totalQuestions} answered`
                 : `${index} of ${totalQuestions} answered`}
             </div>
+
+            <div className="mt-2 text-emerald-300 text-xs">
+              Section: {questions[Math.min(index, totalQuestions - 1)].section} • Parameter: {questions[Math.min(index, totalQuestions - 1)].parameter}
+            </div>
           </div>
 
           {!finished ? (
@@ -134,6 +304,7 @@ export default function Home() {
               <p className="text-base sm:text-lg font-medium mb-6">
                 {questions[index].question}
               </p>
+
               <div className="space-y-3 sm:space-y-4">
                 {questions[index].options.map((opt, i) => {
                   const active = answers[questions[index].id] === opt.dosha;
@@ -176,14 +347,18 @@ export default function Home() {
               >
                 🎉 Your Prakriti is: {result}
               </div>
+
+              <div className="mb-3 text-sm text-emerald-300">
+                Scores — Vata: {tallies.Vata} • Pitta: {tallies.Pitta} • Kapha: {tallies.Kapha}
+              </div>
+
               <div className="mb-4 sm:mb-6 px-2 sm:px-6">
                 <h2 className="text-lg sm:text-2xl font-bold">Personalized Guidance</h2>
                 <p className="text-emerald-300 mt-2 text-sm sm:text-base">
-                  Explore lifestyle, diet, and routines that support your unique
-                  balance. This is an educational insight — for medical concerns,
-                  consult a professional.
+                  Explore lifestyle, diet, and routines that support balance. This is an educational insight — for medical concerns, consult a professional.
                 </p>
               </div>
+
               <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
                 <button
                   className="text-sm sm:text-base border border-emerald-600 bg-emerald-900/40 px-4 py-2 rounded-md text-emerald-300 hover:bg-emerald-800/60 transition"
@@ -206,7 +381,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Floating Chat Button */}
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6">
         <Button
           variant="primary"
@@ -216,9 +390,7 @@ export default function Home() {
         />
       </div>
 
-      {/* Chat Modal */}
       <ChatBot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   );
 }
-

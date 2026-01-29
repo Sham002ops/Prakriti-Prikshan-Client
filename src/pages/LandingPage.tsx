@@ -89,6 +89,8 @@ const FAQS = [
   },
 ];
 
+
+
 gsap.registerPlugin(ScrollTrigger);
 
 // Utility hook: animate section on enter
@@ -226,6 +228,10 @@ const PrakritiLanding: React.FC = () => {
     navigate("/home")
   }
 
+  const handlelogin = () => {
+    navigate("/signin");
+  }
+
   // Hero entrance timeline
   useLayoutEffect(() => {
     if (!heroRef.current) return;
@@ -266,14 +272,14 @@ const PrakritiLanding: React.FC = () => {
         <nav className="fixed top-0 left-0 right-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-black/30 bg-black/20 border-b border-white/10">
           <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 grid place-items-center rounded-lg bg-emerald-500 text-black font-bold">ॐ</div>
+                <img src="/logo.png" alt="" className="w-14 h-12"/>
               <span className="font-semibold">Prakriti AI</span>
             </div>
             <div className="hidden md:flex items-center gap-6 text-sm text-white/80">
               {['Home','Assessment','ChatBot','About'].map((n) => (
                 <button key={n} className="nav-item hover:text-white/100 transition">{n}</button>
               ))}
-              <button className={`nav-item rounded-lg px-3 py-1.5 text-sm font-medium ${gradientCTA} text-black shadow`}>Login</button>
+              <button onClick={() => handlelogin()} className={`nav-item rounded-lg px-3 py-1.5 text-sm font-medium ${gradientCTA} text-black shadow`}>Login</button>
             </div>
           </div>
         </nav>
@@ -394,7 +400,7 @@ const PrakritiLanding: React.FC = () => {
       <footer className="relative py-10 border-t border-white/10 bg-black/50">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 grid place-items-center rounded-md bg-emerald-500 text-black font-bold">ॐ</div>
+                <img src="/logo.png" alt="" className="w-14 h-12"/>
             <span className="text-white/80">Prakriti AI</span>
           </div>
           <p className="text-xs text-white/50">© {new Date().getFullYear()} Prakriti AI. For education only. Not medical advice.</p>

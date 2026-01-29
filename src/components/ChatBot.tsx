@@ -202,7 +202,9 @@ return (
       {/* Header */}
       <div className="p-4 border-b border-slate-950 flex items-center justify-between bg-gradient-to-r from-slate-800 to-slate-900 rounded-t-2xl">
         <div className="flex items-center gap-3">
-          <Bot className="h-6 w-6 text-white" />
+                    <div className=' flex justify-center items-center '>
+              <img src="/logo.png" alt="" className="w-10 h-8 "/>
+          </div>
           <h2 className="text-lg sm:text-xl font-semibold text-gray-100">Prakriti Chatbot</h2>
         </div>
         <button onClick={onClose} className="text-gray-200 hover:text-white" aria-label="Close chat">
