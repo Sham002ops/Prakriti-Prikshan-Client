@@ -176,20 +176,20 @@ const PrakritiLanding: React.FC = () => {
   // FIX: Remove unused openChat state or use it
   // const [openChat, setOpenChat] = useState(false);
 
-  const handleStartAssessment = () => {
-    navigate("/home");
-  };
+  // const handleStartAssessment = () => {
+  //   navigate("/home");
+  // };
 
   const handlelogin = () => {
     navigate("/signin");
   };
 
-  const handleChatBot = () => {
-    // If you have a chat route, navigate to it
-    navigate("/chat");
-    // Or if you want to use the modal, uncomment the openChat state above and use:
-    // setOpenChat(true);
-  };
+  // const handleChatBot = () => {
+  //   // If you have a chat route, navigate to it
+  //   navigate("/chat");
+  //   // Or if you want to use the modal, uncomment the openChat state above and use:
+  //   // setOpenChat(true);
+  // };
 
   // Hero entrance timeline
   useLayoutEffect(() => {
@@ -258,8 +258,8 @@ const PrakritiLanding: React.FC = () => {
                 Take a fast, friendly assessment and chat with an AI guide trained on Ayurvedic principles. Get routines, food tips, and lifestyle insights tailored to you.
               </p>
               <div className="hero-cta mt-6 flex flex-wrap gap-3">
-                <button className={`rounded-xl px-5 py-3 font-semibold ${gradientCTA} text-black shadow-lg hover:brightness-110 active:brightness-95`} onClick={handleStartAssessment}>Start Assessment</button>
-                <button onClick={handleChatBot} className="rounded-xl px-5 py-3 font-semibold border border-white/20 bg-black/30 hover:bg-black/40">💬 Chat with Prakriti Bot</button>
+                {/* <button className={`rounded-xl px-5 py-3 font-semibold ${gradientCTA} text-black shadow-lg hover:brightness-110 active:brightness-95`} onClick={handleStartAssessment}>Start Assessment</button> */}
+                <button onClick={handlelogin} className="rounded-xl px-5 py-3 font-semibold border border-white/20 bg-black/30 hover:bg-black/40">Start Assessment</button>
               </div>
             </div>
             <div className="hero-card relative">
